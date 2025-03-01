@@ -1,0 +1,160 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speech to Text & Translation</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+    <div class="container mt-5">
+        <div class="card shadow p-4">
+            <h2 class="text-center mb-4">Speech to Text & Translation</h2>
+            
+            <label class="form-label">Upload an Audio File:</label>
+            <input type="file" id="audioFile" class="form-control mb-3">
+            <button class="btn btn-primary w-100" onclick="uploadAudio()">Transcribe</button>
+            
+            <h3 class="mt-4">Transcribed Text:</h3>
+            <p id="transcribedText" class="border p-3 bg-white"></p>
+            
+            <h3 class="mt-3">Translate to:</h3>
+            <select id="language" class="form-select">
+                <option value="es">Spanish</option>
+                <option value="fr">French</option>
+                <option value="de">German</option>
+            </select>
+            <button class="btn btn-success w-100 mt-3" onclick="translateText()">Translate</button>
+            
+            <h3 class="mt-4">Translated Text:</h3>
+            <p id="translatedText" class="border p-3 bg-white"></p>
+        </div>
+    </div>
+    
+    <script>
+        async function uploadAudio() {
+            const fileInput = document.getElementById("audioFile");
+            const formData = new FormData();
+            formData.append("file", fileInput.files[0]);
+
+            const response = await fetch("/upload", {
+                method: "POST",
+                body: formData
+            });
+
+            const data = await response.json();
+            document.getElementById("transcribedText").innerText = data.text;
+        }
+
+        async function translateText() {
+            const text = document.getElementById("transcribedText").innerText;
+            const lang = document.getElementById("language").value;
+
+            const response = await fetch("/translate", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ text: text, lang: lang })
+            });
+
+            const data = await response.json();
+            document.getElementById("translatedText").innerText = data.translated_text;
+        }
+    </script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html> -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speech to Text & Translation</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .btn-primary {
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h2 class="text-center">Speech to Text & Translation</h2>
+        <hr>
+
+        <div class="mb-3">
+            <label for="audioFile" class="form-label">Upload an Audio File:</label>
+            <input type="file" class="form-control" id="audioFile">
+        </div>
+        <button class="btn btn-primary" onclick="uploadAudio()">Transcribe</button>
+
+        <h4 class="mt-4">Transcribed Text:</h4>
+        <p id="transcribedText" class="alert alert-light"></p>
+
+        <h4 class="mt-4">Translate to:</h4>
+        <select id="language" class="form-select"></select>
+        <button class="btn btn-success mt-2" onclick="translateText()">Translate</button>
+
+        <h4 class="mt-4">Translated Text:</h4>
+        <p id="translatedText" class="alert alert-info"></p>
+    </div>
+
+    <script>
+        async function fetchLanguages() {
+            const response = await fetch('/languages');
+            const data = await response.json();
+            const languageSelect = document.getElementById("language");
+
+            Object.entries(data.languages).forEach(([code, name]) => {
+                let option = document.createElement("option");
+                option.value = code;
+                option.innerText = name;
+                languageSelect.appendChild(option);
+            });
+        }
+
+        async function uploadAudio() {
+            const fileInput = document.getElementById("audioFile");
+            const formData = new FormData();
+            formData.append("file", fileInput.files[0]);
+
+            const response = await fetch("/upload", {
+                method: "POST",
+                body: formData
+            });
+
+            const data = await response.json();
+            document.getElementById("transcribedText").innerText = data.text;
+        }
+
+        async function translateText() {
+            const text = document.getElementById("transcribedText").innerText;
+            const lang = document.getElementById("language").value;
+
+            const response = await fetch("/translate", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ text: text, lang: lang })
+            });
+
+            const data = await response.json();
+            document.getElementById("translatedText").innerText = data.translated_text;
+        }
+
+        document.addEventListener("DOMContentLoaded", fetchLanguages);
+    </script>
+</body>
+</html>

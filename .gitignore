@@ -1,0 +1,10 @@
+# Ignore virtual environment
+whisper_env/
+
+# Ignore compiled Python files
+__pycache__/
+*.pyc
+*.pyo
+
+# Ignore uploads (optional, if you don’t want to push audio files)
+uploads/
