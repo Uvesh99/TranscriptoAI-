@@ -7,7 +7,7 @@ from googletrans import Translator, LANGUAGES
 app = Flask(__name__)
 
 # Load Whisper Model
-model = whisper.load_model("base")
+model = whisper.load_model("tiny")
 translator = Translator()
 
 # Ensure 'uploads' directory exists
